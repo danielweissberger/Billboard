@@ -1,9 +1,9 @@
 {% for post in posts %}
 
-<div class="row">
-    <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 post_container">
+
+    <div class="center-block post_container">
         <fieldset class = "post_div" id = "#post_{{post.id}}">
-            <legend class="post_date">{{post.created_date}}</legend>
+            <legend class="post_date">{{post.created_date|date:"d/m/Y"}}</legend>
             <span class="post_title">{{post.title}}</span>
             <span class="post_text">{{post.text}}</span>
             <span class="post_author">{{post.author}}</span>
@@ -22,6 +22,6 @@
                 </div>
         </div>
     </div>
-</div>
+
 
 {% endfor %}

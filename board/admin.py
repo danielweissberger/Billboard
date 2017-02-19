@@ -4,3 +4,4 @@ from .models import BoardPost, Comment
 
 admin.site.register(BoardPost)
 admin.site.register(Comment)
+

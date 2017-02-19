@@ -39,6 +39,7 @@ def create_post(request):
     created_date = timezone.now()
     BoardPost.objects.create(text=post_text,author=post_author,created_date=created_date,title=post_title)
 
+
 def refresh_posts(request):
     current_post_ids = json.loads(request.POST.get("current_post_ids"))
     current_comment_ids = json.loads(request.POST.get("current_comment_ids"))

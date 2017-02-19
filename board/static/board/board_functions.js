@@ -1,6 +1,16 @@
 
 board = {}
 
+
+function formatDate(date) {
+
+  var day = date.getDate();
+  var monthIndex = parseInt(date.getMonth()) +1;
+  var year = date.getFullYear();
+  return day + '/0' + monthIndex.toString() + '/' + year;
+}
+
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -31,20 +41,69 @@ board.start = function(){
 
 board.bind_event_handlers = function(){
     $("#new_post").bind("click",board.show_post_form);
+    $("#send_form").bind("click", board.send_form);
     $("#cancel_form").bind("click",board.hide_form);
     $(".show_comments").bind("click",board.show_hide_comments);
     $(".add_comment").bind("click",board.add_comment);
     $("#send_form").bind("click",board.send_post);
     $(".cancel_comment").bind("click",board.hide_comment_form);
+    $(".form-control").on("keyup",board.validate_input)
 //        $(".delete_comment").bind("click",board.delete_comment);
 }
 
-board.send_post = function(){
+board.validate_input = function()
+{
+    board.validate_form([$(this)])
+}
 
-    var post_author = $("#post_author").val();
-    var post_text = $("#post_text").val();
-    var post_title = $("#post_title").val();
+board.flasher = function(input){
+    var flash = setInterval(function(){
+        input.toggleClass("form-error")
+    },300)
+            setTimeout(function(){
+                clearInterval(flash)
+                input.addClass("form-error")
+            },1600)
+    return flash;
+}
+
+board.flash_form_inputs = function(input_list){
+    for(var i=0;i<input_list.length;i++){
+        if(!input_list[i].val()){
+            board.flasher(input_list[i]);
+
+        }
+    }
+}
+
+board.validate_form = function(input_list){
+    validated=true;
+    for(var i=0;i<input_list.length;i++){
+        if(!input_list[i].val()){
+            input_list[i].addClass("form-error")
+            validated=false;
+        }
+        else{
+            input_list[i].removeClass("form-error")
+        }
+    }
+    return validated;
+
+}
+
+board.send_post = function(){
+    var post_author = $("#post_author").val()
+    var post_text = $("#post_text").val()
+    var post_title = $("#post_title").val()
     var csrftoken = getCookie('csrftoken');
+
+    board.flash_form_inputs([$("#post_author"),$("#post_text"),$("#post_title")])
+    if(!board.validate_form([$("#post_author"),$("#post_text"),$("#post_title")])){
+        return;
+    }
+
+    $("#new_post_form").slideUp();
+    $("#new_post_button_div").slideDown();
 
     $("#post_author").val("")
     $("#post_text").val("")
@@ -62,7 +121,8 @@ board.send_post = function(){
     }
     }
 });
-    board.hide_form();
+
+
 }
 
 board.send_comment = function(){
@@ -70,8 +130,14 @@ board.send_comment = function(){
     var csrftoken = getCookie('csrftoken');
     var post_id = this.closest(".comments_div").id
 
+    board.flash_form_inputs([$("#new_comment_text_"+post_id),$("#new_comment_author_"+post_id)])
+    if(!board.validate_form([$("#new_comment_text_"+post_id),$("#new_comment_author_"+post_id)])){
+        return;
+    }
+
     var comment_text = $("#new_comment_text_"+post_id).val();
     var comment_author = $("#new_comment_author_"+post_id).val();
+
     $("#new_comment_text_"+post_id).val("");
     $("#new_comment_author_"+post_id).val("");
 
@@ -97,7 +163,8 @@ board.send_comment = function(){
 
 board.hide_comment_form = function(){
     $(this).closest("div").siblings(".add_comment_div").slideUp();
-    $("#new_comment_text").text("");
+    $(this).closest("div").siblings(".add_comment_div").find(".new_comment_text").val("").removeClass("form-error");
+    $(this).closest("div").siblings(".add_comment_div").find(".author_name").val("").removeClass("form-error")
     $("#author_name").text("");
     $(this).hide('slow').siblings(".add_comment").text("add a comment").unbind("click").bind("click",board.add_comment)
 }
@@ -131,19 +198,21 @@ board.show_hide_comments = function(){
 }
 
 
+
 board.hide_form = function(){
+    $("#post_author").val("").removeClass("form-error")
+    $("#post_text").val("")
+    $("#post_title").val("")
     $("#new_post_form").slideUp();
-    $("#new_post").slideDown();
-    $("#post_text").val("Enter your post text here");
-    $("#post_title").val("Title");
-    $("#post_author").val("Author");
+    $("#new_post_button_div").slideDown();
+
 }
 
 
 board.show_post_form = function(){
-    $("#alert").hide();
+    $("#new_post_legend").text(formatDate(new Date()))
     $("#new_post_form").slideDown();
-    $("#new_post").hide();
+    $("#new_post_button_div").hide();
 }
 
 
@@ -197,6 +266,12 @@ board.poll_posts_and_comments = function(){
     comment_ids = [];
     $("#post_container").find(".post_div").each(function(){ post_ids.push(this.id.replace("#post_",""));});
     $("#post_container").find(".comment").each(function(){comment_ids.push(this.id.replace("comment_",""));});
+    if(post_ids.length>0){
+        $("#alert").hide()
+    }
+    else{
+        $("#alert").show()
+    }
     var csrftoken = getCookie('csrftoken');
     $.ajax("/refresh_posts",{
     type: "POST",

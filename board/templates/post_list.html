@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"->
 <head>
     <script>
         window.CSRF_TOKEN = "{{csrf_token}}";
@@ -28,10 +28,9 @@
     <div id = "post_container">
     {% if posts %}
         {% for post in posts %}
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 post_container">
+                <div class="center-block">
                     <fieldset class = "post_div" id = "#post_{{post.id}}">
-                        <legend class="post_date">{{post.created_date}}</legend>
+                        <legend class="post_date">{{post.created_date|date:"d/m/Y"}}</legend>
                         <span class="post_title">{{post.title}}</span>
                         <span class="post_text">{{post.text}}</span>
                         <span class="post_author">{{post.author}}</span>
@@ -40,7 +39,7 @@
                     <div class = "comments_div" id="{{post.id}}">
                         {% for comment in post.comment_set.all reversed %}
                             <div class = "comment" id = "comment_{{comment.id}}">
-                                <span class="comment_text">{{ comment.text }}  - {{comment.author}} {{comment.created_date}}</span>
+                                <span class="comment_text">{{ comment.text }}  - {{comment.author}} {{comment.created_date|date:"d/m/Y"}}</span>
                                 <!--<button type="submit" class = "delete_comment" value="{{comment.id}}" >Delete</button>-->
                             </div>
                         {% endfor %}
@@ -56,7 +55,6 @@
                             </div>
                     </div>
                 </div>
-            </div>
         {% endfor %}
     {% else %}
         <div id="alert">
@@ -66,13 +64,14 @@
     {% endif %}
 
     </div>
-    <div class="row">
-        <div id="new_post_form" class = "col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" >
-                <div class = "form_div">
-                        <input  class = "form-control" id="post_title" type="text" placeholder ="Title">
-                        <textarea  class = "form-control" id="post_text" placeholder = "Enter your post text here"></textarea>
-                        <input  class = "form-control author_name" id="post_author" type="text" name="author_name" placeholder ="Author">
-                </div>
+
+        <div id="new_post_form" class = "center-block" >
+                <fieldset class = "post_div new_post">
+                        <legend id="new_post_legend" class="post_date"></legend>
+                        <input  class = "form-control" id="post_title" type="text" placeholder ="Title" required="required">
+                        <textarea  class = "form-control" id="post_text" placeholder = "your post text here" required="required"></textarea>
+                        <input  class = "form-control author_name" id="post_author" type="text" name="author_name" placeholder ="Author" required="required">
+                </fieldset>
 
                 <div class = "buttons_div">
                     <div class = "button_container">
@@ -82,9 +81,17 @@
                     </div>
                 </div>
         </div>
-    </div>
-    <button id="new_post" class="btn form_button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+
+
+
+     <div id="new_post_button_div" class = "new_post_button_div center-block" >
+        <button id="new_post" class="btn form_button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+     </div>
+
 </div>
+
+
+
 
 </body>
 </html>
