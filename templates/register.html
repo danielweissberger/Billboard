@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+<p>{{form.username.errors}}</p>
+<p>{{form.password1.errors}}</p>
+<p>{{form.password2.errors}}</p>
+
+ <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <a href="{% url 'login' %}" class="links sign_in panel-title">Back</a>
+                        <a class="continue_as_guest" href="/board/guest" class="guest">Continue as guest</a>
+                    </div>
+                    <div class="panel-body">
+
+<form id="login" method="post" action="{% url 'register' %}">  <!-- how does the login url redirect to board-->
+{% csrf_token %}
+<p class="bs-component">
+<table>
+<tr>
+    <td class="lab">{{ form.username.label_tag }}</td>
+    <td class="userdata" id="reg_username">{{ form.username }}</td>
+</tr>
+<tr>
+    <td class="lab">{{ form.password1.label_tag }}</td>
+    <td class="userdata" id="reg_password">{{ form.password1 }}</td>
+</tr>
+<tr>
+    <td class="lab">{{ form.password2.label_tag }}</td>
+    <td class="userdata">{{ form.password2 }}</td>
+</tr>
+</table>
+</p>
+<p class="bs-component">
+<input class="login-btn btn btn-success btn-sm" type="submit" value="login" />
+    <!--<right><input id="create_account" class="btn btn-success btn-sm" value = "Create Account"/></right>-->
+</p>
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+{% if not user.is_authenticated %}
+$("ul.nav.navbar-nav.navbar-right").css("display","none");
+{% endif %}
+$(".collapsed_nav.navbar-toggle.collapsed").css("display","none");
+</script>
+
+{% endblock %}

@@ -1,5 +1,15 @@
+/*
 body{
-    background-color:white;
+  background: url(https://image.freepik.com/free-psd/white-wood-texture-background-design_1022-75.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  }
+
+*/
+li{
+    font-family:Anton;
 }
 
 legend {
@@ -31,7 +41,11 @@ legend {
     margin-top:10px;
     position:relative;
     padding:12px;
-
+    background-color:white;
+    opacity:.7;
+    -webkit-box-shadow: -13px -2px 37px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: -13px -2px 37px 0px rgba(0,0,0,0.75);
+    box-shadow: -13px -2px 37px 0px rgba(0,0,0,0.75);
 }
 
 .comments_div{
@@ -133,6 +147,7 @@ legend {
 .post_date{
     font-family:Poiret One;
     display:block;
+    color:black;
 }
 
 .post_title{
@@ -155,7 +170,8 @@ legend {
 
 .post_text{
     font-family:Arial;
-    Color:#c1bfc0;
+    color:#c1bfc0;
+    color:black;
     display:block;
 }
 
@@ -259,4 +275,99 @@ legend {
     -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
+
+.guest{
+    float:right;
+    text-decoration:none;
+    display:inline-block;
+}
+
+.panel-title{
+    display:inline-block;
+}
+
+.login-btn{
+background-color: #00b7ef;
+border-color:#00b7ef;
+float:right;
+font-family:anton;
+display:block;
+margin-top:10%;
+}
+
+.login-btn:hover{
+background-color:black;
+float:right;
+
+
+}
+
+.sign_in{
+    color:black;
+    font-family:Anton;
+}
+
+.continue_as_guest{
+    color:#00b7ef;
+    font-family:Anton;
+    float:right
+}
+
+.continue_as_guest:hover{
+    color:black;
+    text-decoration:none;
+}
+
+#welcome{
+    font-family:Anton;
+    color:#00b7ef;
+}
+
+#welcome:hover{
+    color:black;
+}
+
+#account{
+    font-family:Anton;
+    color:black;
+}
+
+#register.login-btn{
+    float:left;
+    display:block;
+    margin-top:2%;
+}
+
+label{
+
+    font-family:Anton;
+    margin-top:15%;
+}
+
+.userinput{
+    margin-top:6%;
+    margin-left:10%;
+    margin-right:5%;
+}
+
+.navbar-collapse.collapse.in{
+    overflow-y:visible;
+}
+
+.links{
+
+    font-family:Anton;
+    color:#00b7ef;
+}
+
+.links:hover{
+    color:black;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+
+.panel-body{
+    padding-right:30px;
 }

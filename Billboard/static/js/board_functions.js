@@ -32,10 +32,33 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+$(document).mouseup(function (e)
+{
+    var container = $(".dropdown-menu");
+    if(!$("#account").is(e.target)){
+        if (!container.is(e.target) // if the target of the click isn't the container...
+            && container.has(e.target).length === 0) // ... nor a descendant of the container
+        {
+            container.hide();
+        }
+     }
+});
+
+board.show_create_account_form = function(){
+    $("#login").toggle();
+    $("#create_user_form").toggle()
+}
+
+
+
 board.start = function(){
     $(document).ready(function () {
-        setInterval(board.poll_posts_and_comments, 500);
+        setInterval(board.poll_posts_and_comments, 3000);
         board.bind_event_handlers();
+        ﻿$("#account").unbind("click").bind("click", function(){$(".sign_in").slideToggle();});
+
+        $("#create_user_form").hide();
+
     });
 };
 
@@ -47,7 +70,11 @@ board.bind_event_handlers = function(){
     $(".add_comment").bind("click",board.add_comment);
     $("#send_form").bind("click",board.send_post);
     $(".cancel_comment").bind("click",board.hide_comment_form);
-    $(".form-control").on("keyup",board.validate_input)
+    $(".form-control").on("keyup",board.validate_input);
+    $("#create_account").unbind("click").bind("click",board.show_create_account_form);
+    $(".collapsed_nav").unbind("click").bind("click",function(){
+        $(".navbar-collapse.collapse.in").slideToggle()});
+
 //        $(".delete_comment").bind("click",board.delete_comment);
 }
 
@@ -97,8 +124,8 @@ board.send_post = function(){
     var post_title = $("#post_title").val()
     var csrftoken = getCookie('csrftoken');
 
-    board.flash_form_inputs([$("#post_author"),$("#post_text"),$("#post_title")])
-    if(!board.validate_form([$("#post_author"),$("#post_text"),$("#post_title")])){
+    board.flash_form_inputs([$("#post_text"),$("#post_title")])
+    if(!board.validate_form([$("#post_text"),$("#post_title")])){
         return;
     }
 
@@ -109,7 +136,7 @@ board.send_post = function(){
     $("#post_text").val("")
     $("#post_title").val("")
 
-    $.ajax("/create_post",{
+    $.ajax("/board/create_post",{
     type: "POST",
     data: {"post_text":post_text,
            "post_author":post_author,
@@ -130,8 +157,8 @@ board.send_comment = function(){
     var csrftoken = getCookie('csrftoken');
     var post_id = this.closest(".comments_div").id
 
-    board.flash_form_inputs([$("#new_comment_text_"+post_id),$("#new_comment_author_"+post_id)])
-    if(!board.validate_form([$("#new_comment_text_"+post_id),$("#new_comment_author_"+post_id)])){
+    board.flash_form_inputs([$("#new_comment_text_"+post_id)])
+    if(!board.validate_form([$("#new_comment_text_"+post_id)])){
         return;
     }
 
@@ -146,7 +173,7 @@ board.send_comment = function(){
     $(this).siblings(".cancel_comment").hide()
     $(this).unbind("click").bind("click",board.add_comment);
 //
-    $.ajax("/save_comment",{
+    $.ajax("/board/save_comment",{
         type: "POST",
         data: {"new_comment_text":comment_text,
                "new_comment_author":comment_author,
@@ -273,7 +300,7 @@ board.poll_posts_and_comments = function(){
         $("#alert").show()
     }
     var csrftoken = getCookie('csrftoken');
-    $.ajax("/refresh_posts",{
+    $.ajax("/board/refresh_posts",{
     type: "POST",
     data: {"current_post_ids":JSON.stringify(post_ids),
            "current_comment_ids":JSON.stringify(comment_ids)

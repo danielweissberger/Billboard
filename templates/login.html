@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+
+ <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="sign_in panel-title">Sign In</h3>
+                        <a class="continue_as_guest" href="/board/guest" class="guest">Continue as guest</a>
+                    </div>
+                    <div class="panel-body">
+<form id="login" method="post" action="{% url 'login' %}">  <!-- how does the login url redirect to board-->
+{% csrf_token %}
+<p class="bs-component">
+<table>
+<tr>
+    <td class="lab">{{ form.username.label_tag }}</td>
+    <td class="userdata" id="username">{{ form.username }}</td>
+</tr>
+<tr>
+    <td class="lab">{{ form.password.label_tag }}</td>
+    <td class="userdata" id="password">{{ form.password }}</td>
+</tr>
+
+</table>
+</p>
+<p class="bs-component">
+<input class="login-btn register btn btn-success btn-sm" type="submit" value="login" />
+
+
+
+</p>
+<input type="hidden" name="next" value="{{ next }}" />
+
+
+</form>
+
+</div>
+<div class="panel-heading"><a href="{% url 'social:begin' 'twitter' %}?next={{ '/board' }}" class="links">Login with Twitter <i class="fa fa-twitter" aria-hidden="true"></i></a></div>
+<div class="panel-heading"><a href="{% url 'social:begin' 'github' %}?next={{'/board'}}" class="links">Login with GitHub <i class="fa fa-github" aria-hidden="true"></i></a><br></div>
+<div class="panel-heading"><a href="{% url 'social:begin' 'facebook' %}?next={{'/board'}}" class="links">Login with Facebook <i class="fa fa-facebook" aria-hidden="true"></i></a> <br></div>
+<div class="panel-heading"><a  onclick="location.href='{% url 'register' %}'" id="register"   value="register" class="links">Create an account</a></div>
+
+</div>
+</div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+{% if not user.is_authenticated %}
+$("ul.nav.navbar-nav.navbar-right").css("display","none");
+{% endif %}
+$(".collapsed_nav.navbar-toggle.collapsed").css("display","none");
+</script>
+
+{% endblock %}
