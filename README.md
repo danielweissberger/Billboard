@@ -1,3 +1,22 @@
+#If not deploying to Heroku, follow these steps to launch the project:
+################################################################################################################
+#Install a python virtual environment
+
+pip install virtualenv
+
+#Then install the requirements from requirements.txt:
+
+pip install -r requirements.txt
+
+#Finally, in a terminal navigate to the parent 'Billboard' directory (manage.py should be located here) and type:
+
+python manage.py runserver
+
+
+###################################################################################################################
+#To run with Heroku:
+
+
 # Heroku Django Starter Template
 
 An utterly fantastic project starter template for Django 1.10.

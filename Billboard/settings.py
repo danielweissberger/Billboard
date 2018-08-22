@@ -72,6 +72,9 @@ AUTHENTICATION_BACKENDS = (
 
 # Add this to tell Django where to redirect after 
 # successful login
+
+#NOTE: When deploying to server, must modify the url settings in facebook developer website
+
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_TWITTER_KEY = 'OuMX0PV0ijwI2t7y2Z0DzLiM3'#'96Z5ulEBNg5YeLHkbr7QrYHfy'
